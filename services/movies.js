@@ -1,10 +1,17 @@
 const { moviesMock } = require('../utils/mocks/movies') 
+const Mongo = require('../lib/mongo')
 
 class MoviesService {
     async getMovies() {
-        const movies = await Promise.resolve(moviesMock)
+        // const movies = await Promise.resolve(moviesMock)
+        const movies = await Mongo.getAll()
         return movies || []
     }
+
+    // async save() {
+    //     const savedExample = await Mongo.save()
+    //     return savedExample
+    // }
     
     async getMovie() {
         const movie = await Promise.resolve(moviesMock[0])
