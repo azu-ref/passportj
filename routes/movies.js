@@ -23,20 +23,6 @@ function moviesApi(app) {
         }
     })
 
-    // router.get('/saved', async function(req, res, next) {
-    //     const { tags } = req.query
-
-    //     try {
-    //         const movies = await moviesService.save()
-    //         res.status(200).json({
-    //             data: movies,
-    //             message: 'movies listed'
-    //         })
-    //     } catch (error) {
-    //         next(error)
-    //     }
-    // })
-
 
     //trae una pelicula segun el id
     router.get('/:id', async function(req, res, next) {
@@ -73,6 +59,7 @@ function moviesApi(app) {
     router.put('/:id', async function(req, res, next) {
         const { id } = req.params
         const { body: movie } = req
+        console.log(movie)
 
         try {
             const updatedMovieId = await moviesService.updateMovie({ id, movie })
