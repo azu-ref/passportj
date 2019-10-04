@@ -1,18 +1,30 @@
 const express = require('express')
+const cors = require('cors')
+
 const app = express()
 
 const { config } = require('./config/index')
 const moviesApi = require('./routes/movies')
 
-const { logErrors, errorHandler } = require('./utils/middlewares/errorHandler')
+const { 
+    logErrors,
+    wrapErrors, 
+    errorHandler 
+} = require('./utils/middlewares/errorHandler')
 
-// body parser 
+const notFoundHanler = require('./utils/middlewares/notFoundHandler')
+
+// body parser and cors
 app.use(express.json())
+app.use(cors)
 
+//Routes
 moviesApi(app)
+app.use(notFoundHanler) // Cath 404 error
 
-// error middlewares
+// errors middlewares
 app.use(logErrors)
+app.use(wrapErrors)
 app.use(errorHandler)
 
 app.listen(config.port, () => {

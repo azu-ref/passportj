@@ -1,5 +1,15 @@
 const express = require('express')
 const MoviesService = require('../services/movies')
+const joi = require('@hapi/joi')
+
+//schemas
+const {
+    movieIdSchema,
+    createMovieSchema,
+    updateMovieSchema
+} = require('../utils/schemas/movies')
+
+const validationHandler = require('../utils/middlewares/validationHandler')
 
 
 function moviesApi(app) {
@@ -26,7 +36,9 @@ function moviesApi(app) {
 
 
     //trae una pelicula segun el id
-    router.get('/:id', async function(req, res, next) {
+    router.get('/:id', 
+    validationHandler(joi.object({ id: movieIdSchema }), 'params'), 
+    async function(req, res, next) {
         const { id } = req.params
         
         try {
@@ -42,7 +54,9 @@ function moviesApi(app) {
     })
 
     //crea una nueva pelicula
-    router.post('/', async function(req, res, next) {
+    router.post('/', 
+    validationHandler(createMovieSchema), 
+    async function(req, res, next) {
         const { body: movie } = req
 
         try {
@@ -57,7 +71,10 @@ function moviesApi(app) {
     })
 
     //actualiza una pelicula segun el id
-    router.put('/:id', async function(req, res, next) {
+    router.put('/:id', 
+    validationHandler({ movieId: movieIdSchema }, 'params'), 
+    validationHandler(updateMovieSchema), 
+    async function(req, res, next) {
         const { id } = req.params
         const { body: movie } = req
         console.log(movie)
@@ -74,7 +91,9 @@ function moviesApi(app) {
     })
 
     //elimina una pelicula segun el id
-    router.delete('/:id', async function(req, res, next) {
+    router.delete('/:id', 
+    validationHandler({ movieId: movieIdSchema }, 'params'),
+    async function(req, res, next) {
         const { id } = req.params
 
         try {
