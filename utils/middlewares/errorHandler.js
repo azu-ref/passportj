@@ -15,7 +15,7 @@ function logErrors(err, req, res, next) {
 
 function errorHandler(err, req, res, next) {
     res.status(err.status || 500)
-    res.json(withErrorStack(err, err.stack))
+    res.json(withErrorStack(err.message, err.stack))
 }
 
 module.exports = {
