@@ -11,6 +11,12 @@ const {
 
 const validationHandler = require('../utils/middlewares/validationHandler')
 
+const cacheResponse = require('../utils/cacheResponse')
+const { 
+    FIVE_MINUTES_IN_SECONDS,
+    SYXTY_MINUTES_IN_SECONDS
+} = require('../utils/time')
+
 
 function moviesApi(app) {
     const router = express.Router()
@@ -20,6 +26,7 @@ function moviesApi(app) {
 
     //trae todas la peliculas o las indicadas el el query de la ruta
     router.get('/', async function(req, res, next) {
+        cacheResponse(res, FIVE_MINUTES_IN_SECONDS)
         const { tags } = req.query
 
         try {
@@ -39,6 +46,7 @@ function moviesApi(app) {
     router.get('/:id', 
     validationHandler(joi.object({ id: movieIdSchema }), 'params'), 
     async function(req, res, next) {
+        cacheResponse(res, SYXTY_MINUTES_IN_SECONDS)
         const { id } = req.params
         
         try {

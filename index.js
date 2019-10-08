@@ -16,7 +16,7 @@ const notFoundHanler = require('./utils/middlewares/notFoundHandler')
 
 // body parser and cors
 app.use(express.json())
-app.use(cors)
+app.use(cors())
 
 //Routes
 moviesApi(app)
