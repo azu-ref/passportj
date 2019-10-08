@@ -9,4 +9,22 @@ const moviesMock = [{"id":"69826b06-27f5-444b-a512-ce8a856d26d2","title":"Silver
 {"id":"76e77204-66de-4084-9efe-6f3e98b0d66d","title":"Black","year":1999,"cover":"http://dummyimage.com/203x219.jpg/ff4444/ffffff","description":"Fusce posuere felis sed lacus. Morbi sem mauris, laoreet ut, rhoncus aliquet, pulvinar sed, nisl. Nunc rhoncus dui vel sem.\n\nSed sagittis. Nam congue, risus semper porta volutpat, quam pede lobortis ligula, sit amet eleifend pede libero quis orci. Nullam molestie nibh in lectus.","duration":1901,"contentRating":"NC-17","source":"https://soup.io/semper.xml","tags":["Drama|Thriller","Adventure|Western","Film-Noir","Crime|Drama","Romance"]},
 {"id":"3d80a830-c8d4-4902-9de9-fa79bb2acc83","title":"Sea Hawk, The","year":1962,"cover":"http://dummyimage.com/123x202.bmp/dddddd/000000","description":"Sed ante. Vivamus tortor. Duis mattis egestas metus.","duration":1960,"contentRating":"G","source":"https://ovh.net/risus/semper/porta/volutpat/quam/pede/lobortis.jpg","tags":["Comedy|Drama|Romance"]}]
 
-module.exports = { moviesMock }
+function filteredMoviesMocks(tag) {
+    return moviesMock.filter(movie => movie.tags.includes(tag))
+}
+
+class MoviesServiceMock {
+    async getMovies() {
+        return Promise.resolve(moviesMock)
+    }
+
+    async createMovie() {
+        return Promise.resolve(moviesMock[0])
+    }
+}
+
+module.exports = { 
+    moviesMock,
+    filteredMoviesMocks,
+    MoviesServiceMock
+}
