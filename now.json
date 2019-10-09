@@ -1,0 +1,13 @@
+{
+    "name": "profersor",
+    "version": 2,
+    "builds": [{ "src": "index.js", "use": "@now/node"}],
+    "routes": [{ "src": "/(.*)", "dest": "/index.js" }],
+    "env": {
+        "DB_USER": "@profersor-db-user",
+        "DB_PASSWORD": "@profersor-db-password",
+        "DB_HOST": "@profersor-db-host",
+        "DB_PORT": "@profersor-db-port",
+        "DB_NAME": "@profersor-db-name"
+    }
+}

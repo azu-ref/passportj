@@ -49,6 +49,11 @@
   },
   "nyc": {
     "all": true,
-    "include": ["rotes", "services", "lib", "utils"]
+    "include": [
+      "rotes",
+      "services",
+      "lib",
+      "utils"
+    ]
   }
 }
