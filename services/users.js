@@ -5,7 +5,6 @@ const bcrypt = require('bcrypt')
 class UsersService {
     constructor() {
         this.collection = User
-
     }
 
     async getUser({ email }) {
