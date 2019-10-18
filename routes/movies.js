@@ -11,6 +11,7 @@ const {
 } = require('../utils/schemas/movies')
 
 const validationHandler = require('../utils/middlewares/validationHandler')
+const scopesValidationHandler = require('../utils/middlewares/scopesValidationHandler')
 
 const cacheResponse = require('../utils/cacheResponse')
 const { 
@@ -30,6 +31,7 @@ function moviesApi(app) {
     //trae todas la peliculas o las indicadas el el query de la ruta
     router.get('/', 
     passport.authenticate('jwt', { session: false }),
+    scopesValidationHandler(['read:movies']),
     async function(req, res, next) {
         cacheResponse(res, FIVE_MINUTES_IN_SECONDS)
         const { tags } = req.query
@@ -50,6 +52,7 @@ function moviesApi(app) {
     //trae una pelicula segun el id
     router.get('/:id', 
     passport.authenticate('jwt', { session: false }),
+    scopesValidationHandler(['read:movies']),
     validationHandler(joi.object({ id: movieIdSchema }), 'params'), 
     async function(req, res, next) {
         cacheResponse(res, SYXTY_MINUTES_IN_SECONDS)
@@ -70,6 +73,7 @@ function moviesApi(app) {
     //crea una nueva pelicula
     router.post('/', 
     passport.authenticate('jwt', { session: false }),
+    scopesValidationHandler(['create:movies']),
     validationHandler(createMovieSchema), 
     async function(req, res, next) {
         const { body: movie } = req
@@ -88,6 +92,7 @@ function moviesApi(app) {
     //actualiza una pelicula segun el id
     router.put('/:id', 
     passport.authenticate('jwt', { session: false }),
+    scopesValidationHandler(['update:movies']),
     validationHandler({ movieId: movieIdSchema }, 'params'), 
     validationHandler(updateMovieSchema), 
     async function(req, res, next) {
@@ -109,6 +114,7 @@ function moviesApi(app) {
     //elimina una pelicula segun el id
     router.delete('/:id', 
     passport.authenticate('jwt', { session: false }),
+    scopesValidationHandler(['delete:movies']),
     validationHandler({ movieId: movieIdSchema }, 'params'),
     async function(req, res, next) {
         const { id } = req.params
