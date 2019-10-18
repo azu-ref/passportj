@@ -1,6 +1,7 @@
 const express = require('express')
 const MoviesService = require('../services/movies')
 const joi = require('@hapi/joi')
+const passport = require('passport')
 
 //schemas
 const {
@@ -17,6 +18,8 @@ const {
     SYXTY_MINUTES_IN_SECONDS
 } = require('../utils/time')
 
+//JWT strategy
+require('../utils/auth/strategies/jwt')
 
 function moviesApi(app) {
     const router = express.Router()
@@ -25,7 +28,9 @@ function moviesApi(app) {
     const moviesService = new MoviesService()
 
     //trae todas la peliculas o las indicadas el el query de la ruta
-    router.get('/', async function(req, res, next) {
+    router.get('/', 
+    passport.authenticate('jwt', { session: false }),
+    async function(req, res, next) {
         cacheResponse(res, FIVE_MINUTES_IN_SECONDS)
         const { tags } = req.query
 
@@ -44,6 +49,7 @@ function moviesApi(app) {
 
     //trae una pelicula segun el id
     router.get('/:id', 
+    passport.authenticate('jwt', { session: false }),
     validationHandler(joi.object({ id: movieIdSchema }), 'params'), 
     async function(req, res, next) {
         cacheResponse(res, SYXTY_MINUTES_IN_SECONDS)
@@ -63,6 +69,7 @@ function moviesApi(app) {
 
     //crea una nueva pelicula
     router.post('/', 
+    passport.authenticate('jwt', { session: false }),
     validationHandler(createMovieSchema), 
     async function(req, res, next) {
         const { body: movie } = req
@@ -80,6 +87,7 @@ function moviesApi(app) {
 
     //actualiza una pelicula segun el id
     router.put('/:id', 
+    passport.authenticate('jwt', { session: false }),
     validationHandler({ movieId: movieIdSchema }, 'params'), 
     validationHandler(updateMovieSchema), 
     async function(req, res, next) {
@@ -100,6 +108,7 @@ function moviesApi(app) {
 
     //elimina una pelicula segun el id
     router.delete('/:id', 
+    passport.authenticate('jwt', { session: false }),
     validationHandler({ movieId: movieIdSchema }, 'params'),
     async function(req, res, next) {
         const { id } = req.params

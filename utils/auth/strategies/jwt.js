@@ -10,7 +10,7 @@ passport.use(
     new Strategy({
         secretOrKey: config.authJwtSecret,
         jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken()
-    }),
+    },
     async function(tokenPayload, cb) {
         const userService = new UserSevices()
 
@@ -27,5 +27,5 @@ passport.use(
         } catch (error) {
             cb(error)
         }
-    }
+    })
 )

@@ -14,6 +14,10 @@ const { config } = require('../config/index')
 // Basic Strategy
 require('../utils/auth/strategies/basic')
 
+// Agregamos las variables de timpo en segundos
+const THIRTY_DAYS_IN_SEC = 2592000
+const TWO_HOURS_IN_SEC = 7200
+
 function authApi(app) {
     const router = express.Router()
     app.use('/api/auth', router)
@@ -23,7 +27,7 @@ function authApi(app) {
 
     // ruta para la utenticacion y autorizacion de usuarios
     router.post('/sign-in', async function(req, res, next) {
-        const { apiKeyToken } = req.body
+        const { apiKeyToken, remenberMe } = req.body
 
         if(!apiKeyToken) {
             next(boom.unauthorized('apiKeyToken is required'))
@@ -60,9 +64,19 @@ function authApi(app) {
                     const token = jwt.sign(payload, config.authJwtSecret, {
                         expiresIn: '15m'
                     })
+
+                    // Si el atributo rememberMe es verdadero la expiración será en 30 dias
+                    // de lo contrario la expiración será en 2 horas
+                    res.cookie("token", token, {
+                        httpOnly: !config.dev,
+                        secure: !config.dev,
+                        maxAge: remenberMe ? THIRTY_DAYS_IN_SEC : TWO_HOURS_IN_SEC
+                    })
     
                     return res.status(200).json({ token, user: { id, name, email }})
                 })
+
+                
             }catch(error) {
                 next(error)
             }
