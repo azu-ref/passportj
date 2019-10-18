@@ -10,13 +10,13 @@ passport.use(new BasicStrategy(async function(email, password, cb) {
 
     try {
         const user = await userService.getUser({ email })
-
+        console.log(user)
         if(!user) {
-            return cb(boom.unauthorized(), false)
+            return cb(boom.unauthorized('hola1'), false)
         }
 
         if(!(await bcrypt.compare(password, user.password))) {
-            return cb(boom.unauthorized(), false)
+            return cb(boom.unauthorized('hola2'), false)
         }
 
         delete user.password
